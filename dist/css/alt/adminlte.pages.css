@@ -278,7 +278,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 .login-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text,
 .register-card-body .input-group .form-control:focus ~ .input-group-prepend .input-group-text,
 .register-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text {
-  border-color: #80bdff;
+  border-color: #8cc056;
 }
 
 .login-card-body .input-group .form-control.is-valid:focus,
@@ -623,8 +623,13 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
 }
 
 .content-wrapper.kanban .card.card-row .card-body {
-  height: 100%;
+  height: calc(100% - (12px + (1.8rem * 1.2) + .5rem));
   overflow-y: auto;
+}
+
+.content-wrapper.kanban .card.card-row .card:last-child {
+  margin-bottom: 0;
+  border-bottom-width: 1px;
 }
 
 .content-wrapper.kanban .card.card-row .card .card-header {

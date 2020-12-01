@@ -432,7 +432,8 @@
   var Default$2 = {
     controlsidebarSlide: true,
     scrollbarTheme: 'os-theme-light',
-    scrollbarAutoHide: 'l'
+    scrollbarAutoHide: 'l',
+    target: SELECTOR_CONTROL_SIDEBAR
   };
   /**
    * Class Definition
@@ -443,8 +444,6 @@
     function ControlSidebar(element, config) {
       this._element = element;
       this._config = config;
-
-      this._init();
     } // Public
 
 
@@ -452,12 +451,13 @@
 
     _proto.collapse = function collapse() {
       var $body = $__default['default']('body');
-      var $html = $__default['default']('html'); // Show the control sidebar
+      var $html = $__default['default']('html');
+      var that = this; // Show the control sidebar
 
       if (this._config.controlsidebarSlide) {
         $html.addClass(CLASS_NAME_CONTROL_SIDEBAR_ANIMATE);
         $body.removeClass(CLASS_NAME_CONTROL_SIDEBAR_SLIDE).delay(300).queue(function () {
-          $__default['default'](SELECTOR_CONTROL_SIDEBAR).hide();
+          $__default['default'](that._config.target).hide();
           $html.removeClass(CLASS_NAME_CONTROL_SIDEBAR_ANIMATE);
           $__default['default'](this).dequeue();
         });
@@ -474,7 +474,7 @@
 
       if (this._config.controlsidebarSlide) {
         $html.addClass(CLASS_NAME_CONTROL_SIDEBAR_ANIMATE);
-        $__default['default'](SELECTOR_CONTROL_SIDEBAR).show().delay(10).queue(function () {
+        $__default['default'](this._config.target).show().delay(10).queue(function () {
           $body.addClass(CLASS_NAME_CONTROL_SIDEBAR_SLIDE).delay(300).queue(function () {
             $html.removeClass(CLASS_NAME_CONTROL_SIDEBAR_ANIMATE);
             $__default['default'](this).dequeue();
@@ -508,6 +508,16 @@
 
     _proto._init = function _init() {
       var _this = this;
+
+      var $body = $__default['default']('body');
+      var shouldNotHideAll = $body.hasClass(CLASS_NAME_CONTROL_SIDEBAR_OPEN) || $body.hasClass(CLASS_NAME_CONTROL_SIDEBAR_SLIDE);
+
+      if (shouldNotHideAll) {
+        $__default['default'](SELECTOR_CONTROL_SIDEBAR).not(this._config.target).hide();
+        $__default['default'](this._config.target).css('display', 'block');
+      } else {
+        $__default['default'](SELECTOR_CONTROL_SIDEBAR).hide();
+      }
 
       this._fixHeight();
 
@@ -547,8 +557,8 @@
       };
       var navbarFixed = ($body.hasClass(CLASS_NAME_NAVBAR_FIXED) || $body.hasClass(CLASS_NAME_NAVBAR_SM_FIXED) || $body.hasClass(CLASS_NAME_NAVBAR_MD_FIXED) || $body.hasClass(CLASS_NAME_NAVBAR_LG_FIXED) || $body.hasClass(CLASS_NAME_NAVBAR_XL_FIXED)) && $__default['default'](SELECTOR_HEADER).css('position') === 'fixed';
       var footerFixed = ($body.hasClass(CLASS_NAME_FOOTER_FIXED) || $body.hasClass(CLASS_NAME_FOOTER_SM_FIXED) || $body.hasClass(CLASS_NAME_FOOTER_MD_FIXED) || $body.hasClass(CLASS_NAME_FOOTER_LG_FIXED) || $body.hasClass(CLASS_NAME_FOOTER_XL_FIXED)) && $__default['default'](SELECTOR_FOOTER).css('position') === 'fixed';
-      var $controlSidebar = $__default['default'](SELECTOR_CONTROL_SIDEBAR);
-      var $controlsidebarContent = $__default['default'](SELECTOR_CONTROL_SIDEBAR + ", " + SELECTOR_CONTROL_SIDEBAR + " " + SELECTOR_CONTROL_SIDEBAR_CONTENT);
+      var $controlSidebar = $__default['default'](this._config.target);
+      var $controlsidebarContent = $__default['default'](this._config.target + ", " + this._config.target + " " + SELECTOR_CONTROL_SIDEBAR_CONTENT);
 
       if (positions.top === 0 && positions.bottom === 0) {
         $controlSidebar.css({
@@ -599,7 +609,7 @@
         }
       }
 
-      var $controlSidebar = $__default['default'](SELECTOR_CONTROL_SIDEBAR + " " + SELECTOR_CONTROL_SIDEBAR_CONTENT);
+      var $controlSidebar = $__default['default'](this._config.target + " " + SELECTOR_CONTROL_SIDEBAR_CONTENT);
       $controlSidebar.css('height', sidebarHeight);
 
       if (typeof $__default['default'].fn.overlayScrollbars !== 'undefined') {
@@ -647,6 +657,9 @@
     event.preventDefault();
 
     ControlSidebar._jQueryInterface.call($__default['default'](this), 'toggle');
+  });
+  $__default['default'](document).ready(function () {
+    ControlSidebar._jQueryInterface.call($__default['default'](SELECTOR_DATA_TOGGLE), '_init');
   });
   /**
    * jQuery API
@@ -1188,9 +1201,9 @@
       var tabId = "panel-" + uniqueName + "-" + Math.floor(Math.random() * 1000);
       var navId = "tab-" + uniqueName + "-" + Math.floor(Math.random() * 1000);
       var newNavItem = "<li class=\"nav-item\" role=\"presentation\"><a class=\"nav-link\" data-toggle=\"row\" id=\"" + navId + "\" href=\"#" + tabId + "\" role=\"tab\" aria-controls=\"" + tabId + "\" aria-selected=\"false\">" + title + "</a></li>";
-      $__default['default'](SELECTOR_TAB_NAVBAR_NAV).append(newNavItem);
+      $__default['default'](SELECTOR_TAB_NAVBAR_NAV).append(escape(newNavItem));
       var newTabItem = "<div class=\"tab-pane fade\" id=\"" + tabId + "\" role=\"tabpanel\" aria-labelledby=\"" + navId + "\"><iframe src=\"" + link + "\"></iframe></div>";
-      $__default['default'](SELECTOR_TAB_CONTENT).append(newTabItem);
+      $__default['default'](SELECTOR_TAB_CONTENT).append(escape(newTabItem));
 
       if (autoOpen) {
         if (this._config.loadingScreen) {
@@ -1507,11 +1520,11 @@
   var SELECTOR_PUSHMENU_BTN = '[data-widget="pushmenu"]';
   var SELECTOR_LOGIN_BOX = '.login-box';
   var SELECTOR_REGISTER_BOX = '.register-box';
+  var CLASS_NAME_SIDEBAR_COLLAPSED = 'sidebar-collapse';
   var CLASS_NAME_SIDEBAR_FOCUSED = 'sidebar-focused';
   var CLASS_NAME_LAYOUT_FIXED$1 = 'layout-fixed';
   var CLASS_NAME_CONTROL_SIDEBAR_SLIDE_OPEN = 'control-sidebar-slide-open';
   var CLASS_NAME_CONTROL_SIDEBAR_OPEN$1 = 'control-sidebar-open';
-  var CLASS_NAME_LAYOUT_TOP_NAV = 'layout-top-nav';
   var Default$6 = {
     scrollbarTheme: 'os-theme-light',
     scrollbarAutoHide: 'l',
@@ -1544,14 +1557,14 @@
       var controlSidebar = 0;
 
       if ($body.hasClass(CLASS_NAME_CONTROL_SIDEBAR_SLIDE_OPEN) || $body.hasClass(CLASS_NAME_CONTROL_SIDEBAR_OPEN$1) || extra === 'control_sidebar') {
-        controlSidebar = $__default['default'](SELECTOR_CONTROL_SIDEBAR_CONTENT$1).height();
+        controlSidebar = $__default['default'](SELECTOR_CONTROL_SIDEBAR_CONTENT$1).outerHeight();
       }
 
       var heights = {
         window: $__default['default'](window).height(),
-        header: $__default['default'](SELECTOR_HEADER$1).length !== 0 ? $__default['default'](SELECTOR_HEADER$1).outerHeight() : 0,
-        footer: $__default['default'](SELECTOR_FOOTER$1).length !== 0 ? $__default['default'](SELECTOR_FOOTER$1).outerHeight() : 0,
-        sidebar: $__default['default'](SELECTOR_SIDEBAR).length !== 0 ? $__default['default'](SELECTOR_SIDEBAR).height() : 0,
+        header: $__default['default'](SELECTOR_HEADER$1).length > 0 ? $__default['default'](SELECTOR_HEADER$1).outerHeight() : 0,
+        footer: $__default['default'](SELECTOR_FOOTER$1).length > 0 ? $__default['default'](SELECTOR_FOOTER$1).outerHeight() : 0,
+        sidebar: $__default['default'](SELECTOR_SIDEBAR).length > 0 ? $__default['default'](SELECTOR_SIDEBAR).height() : 0,
         controlSidebar: controlSidebar
       };
 
@@ -1567,15 +1580,15 @@
 
       if (offset !== false) {
         if (max === heights.controlSidebar) {
-          if ($body.hasClass(CLASS_NAME_LAYOUT_TOP_NAV)) {
-            $contentSelector.css(this._config.panelAutoHeightMode, max + offset + heights.header + heights.footer);
-          } else {
-            $contentSelector.css(this._config.panelAutoHeightMode, max + offset);
-          }
+          $contentSelector.css(this._config.panelAutoHeightMode, max + offset);
         } else if (max === heights.window) {
           $contentSelector.css(this._config.panelAutoHeightMode, max + offset - heights.header - heights.footer);
         } else {
           $contentSelector.css(this._config.panelAutoHeightMode, max + offset - heights.header);
+        }
+
+        if (heights.controlSidebar + heights.footer >= heights.sidebar && heights.controlSidebar != 0) {
+          $contentSelector.css(this._config.panelAutoHeightMode, heights.controlSidebar + offset);
         }
 
         if (this._isFooterFixed()) {
@@ -1600,6 +1613,8 @@
             clickScrolling: true
           }
         });
+      } else {
+        $__default['default'](SELECTOR_SIDEBAR).css('overflow-y', 'auto');
       }
     };
 
@@ -1635,8 +1650,15 @@
       $__default['default'](SELECTOR_SIDEBAR).on('collapsed.lte.treeview expanded.lte.treeview', function () {
         _this.fixLayoutHeight();
       });
+      $__default['default'](SELECTOR_MAIN_SIDEBAR).on('mouseenter mouseleave', function () {
+        if ($__default['default']('body').hasClass(CLASS_NAME_SIDEBAR_COLLAPSED)) {
+          _this.fixLayoutHeight();
+        }
+      });
       $__default['default'](SELECTOR_PUSHMENU_BTN).on('collapsed.lte.pushmenu shown.lte.pushmenu', function () {
-        _this.fixLayoutHeight();
+        setTimeout(function () {
+          _this.fixLayoutHeight();
+        }, 300);
       });
       $__default['default'](SELECTOR_CONTROL_SIDEBAR_BTN).on('collapsed.lte.controlsidebar', function () {
         _this.fixLayoutHeight();
@@ -2051,7 +2073,7 @@
         this._addNotFound();
       } else {
         endResults.each(function (i, result) {
-          $__default['default'](SELECTOR_SEARCH_RESULTS_GROUP).append(_this2._renderItem(result.name, result.link, result.path));
+          $__default['default'](SELECTOR_SEARCH_RESULTS_GROUP).append(_this2._renderItem(escape(result.name), escape(result.link), escape(result.path)));
         });
       }
 
@@ -2572,7 +2594,7 @@
   var SELECTOR_DATA_WIDGET$2 = '[data-widget="treeview"]';
   var CLASS_NAME_OPEN$2 = 'menu-open';
   var CLASS_NAME_IS_OPENING$1 = 'menu-is-opening';
-  var CLASS_NAME_SIDEBAR_COLLAPSED = 'sidebar-collapse';
+  var CLASS_NAME_SIDEBAR_COLLAPSED$1 = 'sidebar-collapse';
   var Default$b = {
     trigger: SELECTOR_DATA_WIDGET$2 + " " + SELECTOR_LINK,
     animationSpeed: 300,
@@ -2671,7 +2693,7 @@
     };
 
     _proto._expandSidebar = function _expandSidebar() {
-      if ($__default['default']('body').hasClass(CLASS_NAME_SIDEBAR_COLLAPSED)) {
+      if ($__default['default']('body').hasClass(CLASS_NAME_SIDEBAR_COLLAPSED$1)) {
         $__default['default'](this._config.sidebarButtonSelector).PushMenu('expand');
       }
     } // Static

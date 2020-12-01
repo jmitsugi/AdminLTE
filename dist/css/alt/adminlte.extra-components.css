@@ -740,13 +740,13 @@
 }
 
 .direct-chat-primary .right > .direct-chat-text {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #4C6E29;
+  border-color: #4C6E29;
   color: #fff;
 }
 
 .direct-chat-primary .right > .direct-chat-text::after, .direct-chat-primary .right > .direct-chat-text::before {
-  border-left-color: #007bff;
+  border-left-color: #4C6E29;
 }
 
 .direct-chat-secondary .right > .direct-chat-text {
