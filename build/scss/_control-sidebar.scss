@@ -16,7 +16,7 @@ html.control-sidebar-animate {
   &::before {
     bottom: $main-footer-height;
     display: none;
-    left: -$control-sidebar-width;
+    left: $sidebar-width - $control-sidebar-width;
     width: $control-sidebar-width;
     @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
   }
@@ -27,6 +27,25 @@ html.control-sidebar-animate {
     position: fixed;
     top: 0;
     z-index: -1;
+  }
+}
+
+//sidebarの状態でleft調整
+body.sidebar-collapse {
+  .control-sidebar {
+    &,
+    &::before {
+      left: calc($sidebar-mini-width - $control-sidebar-width);
+    }
+  }
+}
+
+body.sidebar-closed {
+  .control-sidebar {
+    &,
+    &::before {
+      left: 0 - $control-sidebar-width;
+    }
   }
 }
 
@@ -56,10 +75,28 @@ body.text-sm {
 .control-sidebar-open {
   .control-sidebar {
     display: block;
-
     &,
     &::before {
       left: $sidebar-width;
+    }
+}
+
+  //sidebarの状態でleft調整
+  &.sidebar-collapse {
+    .control-sidebar {
+      &,
+      &::before {
+        left: $sidebar-mini-width;
+      }
+    }
+  }
+
+  &.sidebar-closed {
+    .control-sidebar {
+      &,
+      &::before {
+        left: 0;
+      }
     }
   }
 
@@ -84,11 +121,44 @@ body.text-sm {
     }
   }
 
+  //sidebarの状態でleft調整
+  &.sidebar-collapse {
+    .control-sidebar {
+      &,
+      &::before {
+        left: $sidebar-mini-width;
+        @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
+      }
+    }
+  }
+
+  &.sidebar-closed {
+    .control-sidebar {
+      &,
+      &::before {
+        left: 0;
+        @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
+      }
+    }
+  }
+
   &.control-sidebar-push,
   &.control-sidebar-push-slide {
     .content-wrapper,
     .main-footer {
       padding-left: $control-sidebar-width;
+    }
+  }
+}
+
+//画面が狭くサイドバーなしの時はpushしない
+.sidebar-closed.control-sidebar-slide-open,
+.sidebar-closed.control-sidebar-open {
+  &.control-sidebar-push,
+  &.control-sidebar-push-slide {
+    .content-wrapper,
+    .main-footer {
+      padding-left: 0;
     }
   }
 }
