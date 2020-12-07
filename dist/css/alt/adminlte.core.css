@@ -14052,11 +14052,9 @@ html.control-sidebar-animate {
   z-index: -1;
 }
 
-body.sidebar-collapse .control-sidebar, body.sidebar-collapse .control-sidebar::before {
-  left: calc($sidebar-mini-width - $control-sidebar-width);
-}
-
-body.sidebar-closed .control-sidebar, body.sidebar-closed .control-sidebar::before {
+body.sidebar-closed .control-sidebar, body.sidebar-closed .control-sidebar::before,
+body.sidebar-collapse .control-sidebar,
+body.sidebar-collapse .control-sidebar::before {
   left: -200px;
 }
 

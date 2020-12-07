@@ -31,16 +31,8 @@ html.control-sidebar-animate {
 }
 
 //sidebarの状態でleft調整
+body.sidebar-closed,
 body.sidebar-collapse {
-  .control-sidebar {
-    &,
-    &::before {
-      left: calc($sidebar-mini-width - $control-sidebar-width);
-    }
-  }
-}
-
-body.sidebar-closed {
   .control-sidebar {
     &,
     &::before {
