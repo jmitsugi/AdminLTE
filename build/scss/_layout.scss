@@ -566,7 +566,6 @@ body:not(.layout-fixed) {
   .main-sidebar {
     bottom: 0;
     float: none;
-    height: 100vh;
     left: 0;
     position: fixed;
     top: 0;
@@ -575,12 +574,13 @@ body:not(.layout-fixed) {
   .control-sidebar {
     bottom: 0;
     float: none;
-    height: 100vh;
     position: fixed;
     top: 0;
 
     .control-sidebar-content {
       height: calc(100vh - #{$main-header-height});
+      overflow-y: auto;
+      @include scrollbar-width-thin();
     }
   }
 }
@@ -648,7 +648,7 @@ body:not(.layout-fixed) {
 }
 
 .dark-mode {
-  background-color: lighten($dark, 7.5%) !important;
+  background-color: $dark-main-bg;
   color: $white;
 
   .breadcrumb-item {

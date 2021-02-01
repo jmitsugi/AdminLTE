@@ -30,6 +30,7 @@ const SELECTOR_TAB_CONTENT = `${SELECTOR_DATA_TOGGLE}.iframe-mode .tab-content`
 const SELECTOR_TAB_EMPTY = `${SELECTOR_TAB_CONTENT} .tab-empty`
 const SELECTOR_TAB_LOADING = `${SELECTOR_TAB_CONTENT} .tab-loading`
 const SELECTOR_SIDEBAR_MENU_ITEM = '.main-sidebar .nav-item > a.nav-link'
+const SELECTOR_SIDEBAR_SEARCH_ITEM = '.sidebar-search-results .list-group-item'
 const SELECTOR_HEADER_MENU_ITEM = '.main-header .nav-item a.nav-link'
 const SELECTOR_HEADER_DROPDOWN_ITEM = '.main-header a.dropdown-item'
 const CLASS_NAME_IFRAME_MODE = 'iframe-mode'
@@ -88,10 +89,10 @@ class IFrame {
     const navId = `tab-${uniqueName}-${Math.floor(Math.random() * 1000)}`
 
     const newNavItem = `<li class="nav-item" role="presentation"><a class="nav-link" data-toggle="row" id="${navId}" href="#${tabId}" role="tab" aria-controls="${tabId}" aria-selected="false">${title}</a></li>`
-    $(SELECTOR_TAB_NAVBAR_NAV).append(escape(newNavItem))
+    $(SELECTOR_TAB_NAVBAR_NAV).append(unescape(escape(newNavItem)))
 
     const newTabItem = `<div class="tab-pane fade" id="${tabId}" role="tabpanel" aria-labelledby="${navId}"><iframe src="${link}"></iframe></div>`
-    $(SELECTOR_TAB_CONTENT).append(escape(newTabItem))
+    $(SELECTOR_TAB_CONTENT).append(unescape(escape(newTabItem)))
 
     if (autoOpen) {
       if (this._config.loadingScreen) {
@@ -122,7 +123,7 @@ class IFrame {
       $item = $(item).parent('a').clone()
     }
 
-    $item.find('.right').remove()
+    $item.find('.right, .search-path').remove()
     let title = $item.find('p').text()
     if (title === '') {
       title = $item.text()
@@ -133,7 +134,7 @@ class IFrame {
       return
     }
 
-    this.createTab(title, link, link.replace('.html', '').replace('./', '').replaceAll('/', '-'), autoOpen)
+    this.createTab(title, link, link.replace('.html', '').replace('./', '').replace(/["&'./=?[\]]/gi, '-').replace(/(--)/gi, ''), autoOpen)
   }
 
   switchTab(item) {
@@ -206,7 +207,7 @@ class IFrame {
         this._fixHeight()
       }, 1)
     })
-    $(document).on('click', SELECTOR_SIDEBAR_MENU_ITEM, e => {
+    $(document).on('click', `${SELECTOR_SIDEBAR_MENU_ITEM}, ${SELECTOR_SIDEBAR_SEARCH_ITEM}`, e => {
       e.preventDefault()
       this.openTabSidebar(e.target)
     })
@@ -303,7 +304,7 @@ class IFrame {
       $(SELECTOR_CONTENT_WRAPPER).height(windowHeight)
       $(SELECTOR_CONTENT_IFRAME).height(windowHeight)
     } else {
-      const contentWrapperHeight = parseFloat($(SELECTOR_CONTENT_WRAPPER).css('min-height'))
+      const contentWrapperHeight = parseFloat($(SELECTOR_CONTENT_WRAPPER).css('height'))
       const navbarHeight = $(SELECTOR_TAB_NAV).outerHeight()
       if (tabEmpty == true) {
         setTimeout(() => {
@@ -326,7 +327,7 @@ class IFrame {
       $(this).data(DATA_KEY, data)
     }
 
-    if (typeof operation === 'string' && operation.match(/createTab|openTabSidebar|switchTab|removeActiveTab/)) {
+    if (typeof operation === 'string' && /createTab|openTabSidebar|switchTab|removeActiveTab/.test(operation)) {
       data[operation](...args)
     }
   }
