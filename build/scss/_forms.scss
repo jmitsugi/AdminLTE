@@ -358,7 +358,7 @@ body.text-sm {
   }
 }
 
-.dark-mode {
+@include dark-mode () {
   .form-control:not(.form-control-navbar):not(.form-control-sidebar),
   .custom-select,
   .custom-file-label,
@@ -377,6 +377,14 @@ body.text-sm {
     background-color: $dark;
     color: $white;
     border-color: $gray-600;
+  }
+
+  .custom-select {
+    background: $dark $custom-select-dark-background;
+
+    &[multiple]{
+      background: $dark;
+    }
   }
 
   .input-group-text {
@@ -400,5 +408,32 @@ body.text-sm {
     &::-ms-track {
       background-color: lighten($dark, 7.5%);
     }
+
+    @each $name, $color in $theme-colors-alt {
+      @include custom-range-variant($name, $color);
+    }
+
+    @each $name, $color in $colors-alt {
+      @include custom-range-variant($name, $color);
+    }
+  }
+
+  // custom switch color variations
+  .custom-switch {
+    @each $name, $color in $theme-colors-alt {
+      @include custom-switch-variant($name, $color);
+    }
+
+    @each $name, $color in $colors-alt {
+      @include custom-switch-variant($name, $color);
+    }
+  }
+
+  @each $name, $color in $theme-colors-alt {
+    @include custom-control-input-variant($name, $color);
+  }
+
+  @each $name, $color in $colors-alt {
+    @include custom-control-input-variant($name, $color);
   }
 }
