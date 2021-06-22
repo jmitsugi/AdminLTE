@@ -233,7 +233,7 @@ class IFrame {
       this._setItemActive($el.find('iframe').attr('src'))
     }
 
-    this._setupListeners()
+//    this._setupListeners()
     this._fixHeight(true)
   }
 
