@@ -1,3 +1,15 @@
+// Custom Variables START
+$sidebar-width: 200px;
+$main-footer-padding: 0;
+$main-footer-padding-sm: 0;
+$main-footer-border-top-width: 0;
+$main-footer-height-inner: 0;
+$main-footer-height: 0;
+$main-footer-height-sm-inner: 0;
+$main-footer-height-sm: 0;
+// Custom Variables END
+
+
 /*!
  *   AdminLTE v3.1.0
  *   Author: Colorlib
@@ -23,3 +35,8 @@
 @import "parts/pages";
 @import "parts/plugins";
 @import "parts/miscellaneous";
+
+
+// Custom Style START
+@import "control-sidebar_custom"
+// Custom Style END

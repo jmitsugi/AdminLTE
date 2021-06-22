@@ -1,0 +1,121 @@
+//
+// Component: Control Sidebar
+//
+
+.control-sidebar {
+  &,
+  &::before {
+    left: $sidebar-width - $control-sidebar-width;
+    @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
+  }
+}
+
+//sidebar
+body.sidebar-closed,
+body.sidebar-collapse {
+  .control-sidebar {
+    &,
+    &::before {
+      left: 0 - $control-sidebar-width;
+    }
+  }
+}
+
+.control-sidebar-push-slide {
+  .content-wrapper,
+  .main-footer {
+    @include transition(padding-left $transition-speed $transition-fn);
+  }
+}
+
+// Control sidebar open state
+.control-sidebar-open {
+  .control-sidebar {
+    &,
+    &::before {
+      left: $sidebar-width;
+    }
+  }
+  //sidebar
+  &.sidebar-collapse {
+    .control-sidebar {
+      &,
+      &::before {
+        left: $sidebar-mini-width;
+      }
+    }
+  }
+
+  &.sidebar-closed,
+  &.sidebar-none {
+    .control-sidebar {
+      &,
+      &::before {
+        left: 0;
+      }
+    }
+  }
+
+  &.control-sidebar-push,
+  &.control-sidebar-push-slide {
+    .content-wrapper,
+    .main-footer {
+      margin-right: 0;
+      padding-left: $control-sidebar-width;
+    }
+  }
+}
+
+// Control sidebar slide over content state
+.control-sidebar-slide-open {
+  .control-sidebar {
+    &,
+    &::before {
+      left: $sidebar-width;
+      @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
+    }
+  }
+
+  //sidebar
+  &.sidebar-collapse {
+    .control-sidebar {
+      &,
+      &::before {
+        margin-right: 0;
+        left: $sidebar-mini-width;
+        @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
+      }
+    }
+  }
+
+  &.sidebar-closed {
+    .control-sidebar {
+      &,
+      &::before {
+        left: 0;
+        @include transition(left $transition-speed $transition-fn, display $transition-speed $transition-fn);
+      }
+    }
+  }
+
+  &.control-sidebar-push,
+  &.control-sidebar-push-slide {
+    .content-wrapper,
+    .main-footer {
+      margin-right: 0;
+      padding-left: $control-sidebar-width;
+    }
+  }
+}
+
+//???????????????push???
+.sidebar-closed.control-sidebar-slide-open,
+.sidebar-closed.control-sidebar-open {
+  &.control-sidebar-push,
+  &.control-sidebar-push-slide {
+    .content-wrapper,
+    .main-footer {
+      padding-left: 0;
+    }
+  }
+}
