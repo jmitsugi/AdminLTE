@@ -36731,4 +36731,8 @@ body.sidebar-collapse .control-sidebar::before {
 .sidebar-closed.control-sidebar-open.control-sidebar-push-slide .main-footer {
   padding-left: 0;
 }
+
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.disabled {
+  color: #6c757d;
+}
 /*# sourceMappingURL=adminlte.light.css.map */
